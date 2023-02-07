@@ -16,12 +16,24 @@ public sealed partial class SiliconSystem
 
     private void OnModuleInserted(EntityUid uid, SiliconModuleComponent component, EntGotInsertedIntoContainerMessage args)
     {
-        TryAddModuleToEntity(uid, args.Container.Owner, component);
+        var chassisEnt = args.Container.Owner;
+        if (!TryComp<SiliconChassisComponent>(chassisEnt, out var chassis))
+            return;
+        if (args.Container != chassis.ModuleContainer)
+            return;
+
+        TryAddModuleToEntity(uid, chassisEnt, component, chassis);
     }
 
     private void OnModuleRemoved(EntityUid uid, SiliconModuleComponent component, EntGotRemovedFromContainerMessage args)
     {
-        TryRemoveModuleFromEntity(uid, args.Container.Owner, component);
+        var chassisEnt = args.Container.Owner;
+        if (!TryComp<SiliconChassisComponent>(chassisEnt, out var chassis))
+            return;
+        if (args.Container != chassis.ModuleContainer)
+            return;
+
+        TryRemoveModuleFromEntity(uid, chassisEnt, component, chassis);
     }
 
     public bool TryAddModuleToEntity(EntityUid moduleEnt, EntityUid chassisEnt, SiliconModuleComponent? module = null, SiliconChassisComponent? chassis = null)
@@ -34,8 +46,6 @@ public sealed partial class SiliconSystem
 
         if (!chassis.ModuleWhitelist?.IsValid(moduleEnt) ?? false)
             return false;
-
-        // TODO: if there's a whitelist for modules, it should go here.
 
         module.InstalledEntity = chassisEnt;
         chassis.ModuleContainer.Insert(moduleEnt);
@@ -71,12 +81,12 @@ public sealed partial class SiliconSystem
 
         foreach (var item in new HashSet<EntityUid>(module.ProvidedItemsEnts))
         {
-            module.ProvidedItemsEnts.Remove(item);
             if (!TryRemoveInnateTool(chassisEnt, item, chassis))
             {
                 _sawmill.Error($"Failed to remove module item '{item}' into {ToPrettyString(chassisEnt)}");
                 continue;
             }
+            module.ProvidedItemsEnts.Remove(item);
         }
 
         _actions.RemoveProvidedActions(chassisEnt, moduleEnt);
