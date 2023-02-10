@@ -1,0 +1,15 @@
+- type: entity
+  id: BaseSiliconModule
+  parent: BaseItem
+  name: base silicon module
+  description: A small device containing hardware to be used by silicons.
+  components:
+  - type: Item
+    size: 10
+  - type: Sprite
+    sprite: Objects/Specific/Research/researchdisk.rsi
+    state: icon
+  - type: SiliconModule
+    providedItems:
+    - Claymore
+    - MeleeDebug200 #don't leave this in

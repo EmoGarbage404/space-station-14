@@ -1,9 +1,10 @@
 ﻿using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared.Silicons.Components;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent]
 public sealed class SiliconChassisComponent : Component
 {
     /// <summary>
@@ -17,7 +18,7 @@ public sealed class SiliconChassisComponent : Component
     /// A container which holds all of the modules
     /// that are currently installed.
     /// </summary>
-    [DataField("moduleContainer"), ViewVariables(VVAccess.ReadWrite)]
+    [ViewVariables(VVAccess.ReadWrite)]
     public Container ModuleContainer = default!;
 
     /// <summary>
@@ -30,7 +31,7 @@ public sealed class SiliconChassisComponent : Component
     /// this is used for getting unique hand names.
     /// </summary>
     [DataField("handCounter")]
-    public int HandCounter = 0;
+    public int HandCounter;
 
     /// <summary>
     /// A whitelist determining what modules can be added.

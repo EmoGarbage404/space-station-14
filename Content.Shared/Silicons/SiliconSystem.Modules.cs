@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Content.Shared.Hands.Components;
+using Content.Shared.Interaction;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Silicons.Components;
 using Robust.Shared.Containers;
@@ -10,23 +11,22 @@ public sealed partial class SiliconSystem
 {
     public void InitializeModules()
     {
-        SubscribeLocalEvent<SiliconModuleComponent, EntGotInsertedIntoContainerMessage>(OnModuleInserted);
         SubscribeLocalEvent<SiliconModuleComponent, EntGotRemovedFromContainerMessage>(OnModuleRemoved);
+        // TODO: replace with a ui or some shit
+        SubscribeLocalEvent<SiliconModuleComponent, AfterInteractEvent>(OnAfterInteract);
     }
 
-    private void OnModuleInserted(EntityUid uid, SiliconModuleComponent component, EntGotInsertedIntoContainerMessage args)
+    private void OnAfterInteract(EntityUid uid, SiliconModuleComponent component, AfterInteractEvent args)
     {
-        var chassisEnt = args.Container.Owner;
-        if (!TryComp<SiliconChassisComponent>(chassisEnt, out var chassis))
+        if (args.Target is not { } target)
             return;
-        if (args.Container != chassis.ModuleContainer)
-            return;
-
-        TryAddModuleToEntity(uid, chassisEnt, component, chassis);
+        TryAddModuleToEntity(args.Used, target, component);
     }
 
     private void OnModuleRemoved(EntityUid uid, SiliconModuleComponent component, EntGotRemovedFromContainerMessage args)
     {
+        if (component.InstalledEntity == null)
+            return;
         var chassisEnt = args.Container.Owner;
         if (!TryComp<SiliconChassisComponent>(chassisEnt, out var chassis))
             return;
@@ -44,6 +44,9 @@ public sealed partial class SiliconSystem
         if (chassis.ModuleAmount >= chassis.MaxModules)
             return false;
 
+        if (module.InstalledEntity != null)
+            return false;
+
         if (!chassis.ModuleWhitelist?.IsValid(moduleEnt) ?? false)
             return false;
 
@@ -57,19 +60,18 @@ public sealed partial class SiliconSystem
             {
                 _sawmill.Error($"Failed to install module item '{item}' into {ToPrettyString(chassisEnt)}");
                 // TODO: make this error handling more graceful.
-                continue;
+                // it should probably attempt to undo the items
+                // it has just added. do i care? BLEECH - emo
+                return false;
             }
             module.ProvidedItemsEnts.Add(itemEnt.Value);
         }
 
         _actions.AddActions(chassisEnt, module.ProvidedActions, moduleEnt);
 
-        //TODO: misc other borg abilities
-        // implementation notes from dear emogarbage
-        // - we need generic systems for adding armor/various upgrades
-        // - logical way to do this is to steal from xenoarch
-        // - allow modules to define components to just attach to chassis
-        // - oh boy this sounds fun i hope there's no bugs :godo:
+        // TODO: misc other borg abilities
+        // either do funny copying of component like xenoarch
+        // or just do event relays. idk which.
 
         return true;
     }
@@ -79,12 +81,15 @@ public sealed partial class SiliconSystem
         if (!Resolve(moduleEnt, ref module) || !Resolve(chassisEnt, ref chassis))
             return false;
 
+        if (module.InstalledEntity == null)
+            return false;
+
         foreach (var item in new HashSet<EntityUid>(module.ProvidedItemsEnts))
         {
             if (!TryRemoveInnateTool(chassisEnt, item, chassis))
             {
                 _sawmill.Error($"Failed to remove module item '{item}' into {ToPrettyString(chassisEnt)}");
-                continue;
+                return false;
             }
             module.ProvidedItemsEnts.Remove(item);
         }
@@ -105,6 +110,7 @@ public sealed partial class SiliconSystem
 
         var item = Spawn(tool, xform.Coordinates);
         var handname = $"silicon-hand-{component.HandCounter}";
+        component.HandCounter++;
         _hands.AddHand(uid, handname, HandLocation.Middle);
         if (!_hands.TryPickup(uid, item, handname, false))
         {
