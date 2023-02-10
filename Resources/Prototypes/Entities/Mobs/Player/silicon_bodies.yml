@@ -1,8 +1,7 @@
 - type: entity
   id: BaseSiliconChassis
-  parent: SimpleSpaceMobBase 
   name: chassis
-  description: The basis of your future world takeover plans.
+  description: The basic building block of a robot.
   components:
   - type: ContainerContainer
     containers:
@@ -43,6 +42,7 @@
   - type: Sprite
     drawdepth: Mobs
     netsync: false
+    noRot: true
     layers:
     - state: drone
       sprite: Mobs/Silicon/drone.rsi
@@ -99,4 +99,48 @@
   - type: Recyclable
     safe: false
   - type: StandingState
-  - type: Alerts
+  - type: Alerts  
+  - type: LagCompensation
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: InputMover
+  - type: MobMover
+  - type: Faction
+    factions:
+    - SimpleNeutral
+  - type: MovedByPressure
+  - type: DamageOnHighSpeedImpact
+    damage:
+      types:
+        Blunt: 5
+    soundHit:
+      path: /Audio/Effects/hit_kick.ogg
+  - type: Physics
+    bodyType: KinematicController
+  - type: RadiationReceiver
+  - type: AtmosExposed
+  - type: Flammable
+    fireSpread: true
+    canResistFire: true
+    damage:
+      types:
+        Heat: 1 #per second, scales with number of fire 'stacks'
+  - type: Temperature
+    heatDamageThreshold: 360
+    coldDamageThreshold: 0
+    currentTemperature: 310.15
+    coldDamage:
+      types:
+        Cold : 0.1 #per second, scales with temperature & other constants
+    specificHeat: 42
+    heatDamage:
+      types:
+        Heat : 0.1 #per second, scales with temperature & other constants
+  - type: Appearance
+  - type: RotationVisuals
+  - type: Climbing
+  - type: Polymorphable
+  - type: Buckle
+  - type: Recyclable
+    safe: false

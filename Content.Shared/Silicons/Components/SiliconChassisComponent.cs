@@ -27,8 +27,7 @@ public sealed class SiliconChassisComponent : Component
     public int ModuleAmount => ModuleContainer.ContainedEntities.Count;
 
     /// <summary>
-    /// a small counter used to incremement the number of hands.
-    /// this is used for getting unique hand names.
+    /// a counter used to get unique hand names.
     /// </summary>
     [DataField("handCounter")]
     public int HandCounter;
