@@ -6,6 +6,7 @@
   - type: ContainerContainer
     containers:
       module-container: !type:Container
+      leg-container: !type:Container
   - type: SiliconChassis
     maxModules: 3
   - type: NameIdentifier
@@ -110,12 +111,6 @@
     factions:
     - SimpleNeutral
   - type: MovedByPressure
-  - type: DamageOnHighSpeedImpact
-    damage:
-      types:
-        Blunt: 5
-    soundHit:
-      path: /Audio/Effects/hit_kick.ogg
   - type: Physics
     bodyType: KinematicController
   - type: RadiationReceiver
@@ -126,21 +121,9 @@
     damage:
       types:
         Heat: 1 #per second, scales with number of fire 'stacks'
-  - type: Temperature
-    heatDamageThreshold: 360
-    coldDamageThreshold: 0
-    currentTemperature: 310.15
-    coldDamage:
-      types:
-        Cold : 0.1 #per second, scales with temperature & other constants
-    specificHeat: 42
-    heatDamage:
-      types:
-        Heat : 0.1 #per second, scales with temperature & other constants
   - type: Appearance
   - type: RotationVisuals
   - type: Climbing
   - type: Polymorphable
   - type: Buckle
-  - type: Recyclable
     safe: false

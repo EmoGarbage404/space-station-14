@@ -72,6 +72,7 @@ public sealed partial class SiliconSystem
         // TODO: misc other borg abilities
         // either do funny copying of component like xenoarch
         // or just do event relays. idk which.
+        // i've made up my mind i'm doing event relays -2/16/23
 
         return true;
     }
@@ -97,12 +98,14 @@ public sealed partial class SiliconSystem
         _actions.RemoveProvidedActions(chassisEnt, moduleEnt);
 
         module.InstalledEntity = null;
-        chassis.ModuleContainer.Remove(moduleEnt);
-        return true;
+        return chassis.ModuleContainer.Remove(moduleEnt);
     }
 
-    private bool TryAddInnateTool(EntityUid uid, string tool, [NotNullWhen(true)] out EntityUid? toolEnt,
-        SiliconChassisComponent? component = null, TransformComponent? xform = null)
+    private bool TryAddInnateTool(EntityUid uid,
+        string? tool,
+        [NotNullWhen(true)] out EntityUid? toolEnt,
+        SiliconChassisComponent? component = null,
+        TransformComponent? xform = null)
     {
         toolEnt = null;
         if (!Resolve(uid, ref component, ref xform))

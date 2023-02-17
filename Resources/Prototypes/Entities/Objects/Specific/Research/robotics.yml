@@ -13,3 +13,19 @@
     providedItems:
     - Claymore
     - MeleeDebug200 #don't leave this in
+
+- type: entity
+  id: BaseSiliconLeg
+  parent: BaseItem
+  name: base silicon leg
+  description: A movement apparatus used for silicons.
+  components:
+  - type: Item
+    size: 10
+  - type: Sprite
+    sprite: Objects/Specific/Research/researchdisk.rsi
+    state: icon
+  - type: MovementSpeedModifier
+  - type: SiliconLeg
+    baseWalkSpeed: 4
+    baseSprintSpeed: 4
