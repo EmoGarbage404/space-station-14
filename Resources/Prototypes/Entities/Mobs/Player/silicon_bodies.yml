@@ -7,6 +7,7 @@
     containers:
       module-container: !type:Container
       leg-container: !type:Container
+      mind-receptacle-container-slot: !type:ContainerSlot
   - type: SiliconChassis
     maxModules: 3
   - type: NameIdentifier

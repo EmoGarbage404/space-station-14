@@ -68,6 +68,24 @@ public sealed class SiliconChassisComponent : Component
     #endregion
 
     /// <summary>
+    /// A container which holds the currently inserted
+    /// mind receptacle
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    public ContainerSlot MindReceptacleSlot = default!;
+
+    /// <summary>
+    /// Whether or not the mind receptacle is installed.
+    /// </summary>
+    public bool HasMindReceptacle => MindReceptacleSlot.ContainedEntity.HasValue;
+
+    /// <summary>
+    /// A whitelist determining what mind receptacle can be added.
+    /// </summary>
+    [DataField("mindReceptacleWhitelist")]
+    public EntityWhitelist? MindReceptacleWhitelist;
+
+    /// <summary>
     /// Intrinsic slowdown penalty from the chassis.
     /// Multiplicative
     /// </summary>

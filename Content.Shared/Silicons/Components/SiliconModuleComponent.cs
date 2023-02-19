@@ -33,3 +33,17 @@ public sealed class SiliconModuleComponent : Component
     [DataField("providedActions")]
     public HashSet<ActionType> ProvidedActions = new();
 }
+
+/// <summary>
+/// Raised before the module entity is inserted into the chassis
+/// </summary>
+/// <param name="Chassis"></param>
+[ByRefEvent]
+public readonly record struct ModuleInstalledEvent(EntityUid Chassis);
+
+/// <summary>
+/// Raised before the module entity is removed from the chassis
+/// </summary>
+/// <param name="Chassis"></param>
+[ByRefEvent]
+public readonly record struct ModuleRemovedEvent(EntityUid Chassis);

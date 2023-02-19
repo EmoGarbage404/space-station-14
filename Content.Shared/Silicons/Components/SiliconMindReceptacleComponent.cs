@@ -1,10 +1,12 @@
 ﻿namespace Content.Shared.Silicons.Components;
 
-/// <summary>
-/// This is used for...
-/// </summary>
 [RegisterComponent]
 public sealed class SiliconMindReceptacleComponent : Component
 {
-    
+    /// <summary>
+    /// The entity this leg is installed into.
+    /// Can be null.
+    /// </summary>
+    [DataField("installedEntity")]
+    public EntityUid? InstalledEntity;
 }

@@ -7,7 +7,7 @@ using Robust.Shared.Containers;
 
 namespace Content.Shared.Silicons;
 
-public sealed partial class SiliconSystem
+public abstract partial class SharedSiliconSystem
 {
     public void InitializeModules()
     {
@@ -20,7 +20,7 @@ public sealed partial class SiliconSystem
     {
         if (args.Target is not { } target)
             return;
-        TryAddModuleToEntity(args.Used, target, component);
+        args.Handled = TryAddModuleToEntity(args.Used, target, component);
     }
 
     private void OnModuleRemoved(EntityUid uid, SiliconModuleComponent component, EntGotRemovedFromContainerMessage args)
@@ -51,7 +51,6 @@ public sealed partial class SiliconSystem
             return false;
 
         module.InstalledEntity = chassisEnt;
-        chassis.ModuleContainer.Insert(moduleEnt);
 
         var xform = Transform(chassisEnt);
         foreach (var item in module.ProvidedItems)
@@ -69,11 +68,9 @@ public sealed partial class SiliconSystem
 
         _actions.AddActions(chassisEnt, module.ProvidedActions, moduleEnt);
 
-        // TODO: misc other borg abilities
-        // either do funny copying of component like xenoarch
-        // or just do event relays. idk which.
-        // i've made up my mind i'm doing event relays -2/16/23
-
+        var ev = new ModuleInstalledEvent(chassisEnt);
+        RaiseLocalEvent(moduleEnt, ev);
+        chassis.ModuleContainer.Insert(moduleEnt);
         return true;
     }
 
@@ -98,6 +95,8 @@ public sealed partial class SiliconSystem
         _actions.RemoveProvidedActions(chassisEnt, moduleEnt);
 
         module.InstalledEntity = null;
+        var ev = new ModuleRemovedEvent(chassisEnt);
+        RaiseLocalEvent(moduleEnt, ev);
         return chassis.ModuleContainer.Remove(moduleEnt);
     }
 

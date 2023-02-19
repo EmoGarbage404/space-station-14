@@ -5,7 +5,7 @@ using Robust.Shared.Containers;
 
 namespace Content.Shared.Silicons;
 
-public sealed partial class SiliconSystem
+public abstract partial class SharedSiliconSystem
 {
     public void InitializeLegs()
     {
@@ -18,7 +18,7 @@ public sealed partial class SiliconSystem
     {
         if (args.Target is not { } target)
             return;
-        TryAddLegToEntity(args.Used, target, component);
+        args.Handled = TryAddLegToEntity(args.Used, target, component);
     }
 
     private void OnLegRemoved(EntityUid uid, SiliconLegComponent component, EntGotRemovedFromContainerMessage args)
@@ -54,16 +54,16 @@ public sealed partial class SiliconSystem
         return true;
     }
 
-    public bool TryRemoveLegFromEntity(EntityUid legEnt, EntityUid chassisEnt, SiliconLegComponent? module = null, SiliconChassisComponent? chassis = null)
+    public bool TryRemoveLegFromEntity(EntityUid legEnt, EntityUid chassisEnt, SiliconLegComponent? leg = null, SiliconChassisComponent? chassis = null)
     {
-        if (!Resolve(legEnt, ref module) || !Resolve(chassisEnt, ref chassis))
+        if (!Resolve(legEnt, ref leg) || !Resolve(chassisEnt, ref chassis))
             return false;
 
-        if (module.InstalledEntity == null)
+        if (leg.InstalledEntity == null)
             return false;
 
-        module.InstalledEntity = null;
-        var success = chassis.ModuleContainer.Remove(legEnt);
+        leg.InstalledEntity = null;
+        var success = chassis.LegContainer.Remove(legEnt);
         if (success)
             UpdateMovementSpeedFromLegs(chassisEnt, chassis);
         return success;
