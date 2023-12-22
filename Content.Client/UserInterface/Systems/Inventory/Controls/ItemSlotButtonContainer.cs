@@ -2,9 +2,10 @@
 
 namespace Content.Client.UserInterface.Systems.Inventory.Controls;
 
-public sealed class ItemSlotButtonContainer : ItemSlotUIContainer<SlotControl>
+[Virtual]
+public class ItemSlotButtonContainer : ItemSlotUIContainer<SlotControl>
 {
-    private readonly InventoryUIController _inventoryController;
+    protected readonly InventoryUIController InventoryController;
     private string _slotGroup = "";
 
     public string SlotGroup
@@ -12,19 +13,19 @@ public sealed class ItemSlotButtonContainer : ItemSlotUIContainer<SlotControl>
         get => _slotGroup;
         set
         {
-            _inventoryController.RemoveSlotGroup(SlotGroup);
+            InventoryController.RemoveSlotGroup(SlotGroup);
             _slotGroup = value;
-            _inventoryController.RegisterSlotGroupContainer(this);
+            InventoryController.RegisterSlotGroupContainer(this);
         }
     }
 
     public ItemSlotButtonContainer()
     {
-        _inventoryController = UserInterfaceManager.GetUIController<InventoryUIController>();
+        InventoryController = UserInterfaceManager.GetUIController<InventoryUIController>();
     }
 
     ~ItemSlotButtonContainer()
     {
-        _inventoryController.RemoveSlotGroup(SlotGroup);
+        InventoryController.RemoveSlotGroup(SlotGroup);
     }
 }

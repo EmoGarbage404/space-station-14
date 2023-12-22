@@ -1,10 +1,12 @@
+using Content.Client.UserInterface.Systems.Inventory;
+
 namespace Content.Client.Inventory;
 
 /// <summary>
 /// A character UI which shows items the user has equipped within his inventory
 /// </summary>
 [RegisterComponent]
-[Access(typeof(ClientInventorySystem))]
+[Access(typeof(ClientInventorySystem), typeof(InventoryUIController))]
 public sealed partial class InventorySlotsComponent : Component
 {
     [ViewVariables]

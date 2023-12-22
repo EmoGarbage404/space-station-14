@@ -1,7 +1,10 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Content.Client.Gameplay;
 using Content.Client.Hands.Systems;
 using Content.Client.Inventory;
 using Content.Client.UserInterface.Controls;
+using Content.Client.UserInterface.Systems.Gameplay;
 using Content.Client.UserInterface.Systems.Inventory.Controls;
 using Content.Client.UserInterface.Systems.Inventory.Windows;
 using Content.Shared.Hands.Components;
@@ -16,7 +19,6 @@ using Robust.Shared.Input.Binding;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 using static Content.Client.Inventory.ClientInventorySystem;
-using static Robust.Client.UserInterface.Controls.BaseButton;
 
 namespace Content.Client.UserInterface.Systems.Inventory;
 
@@ -34,10 +36,27 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
     private readonly Dictionary<string, ItemSlotButtonContainer> _slotGroups = new();
 
     private StrippingWindow? _strippingWindow;
-    private ItemSlotButtonContainer? _inventoryHotbar;
-    private MenuButton? InventoryButton => UIManager.ActiveScreen?.GetWidget<MenuBar.Widgets.GameTopMenuBar>()?.InventoryButton;
+    private ItemSlotClothingContainer? _inventoryHotbar;
 
-    private SlotControl? _lastHovered = null;
+    private SlotButton? _inventoryButton;
+
+    private SlotControl? _lastHovered;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        var gameplayStateLoad = UIManager.GetUIController<GameplayStateLoadController>();
+        gameplayStateLoad.OnScreenLoad += OnScreenLoad;
+    }
+
+    private void OnScreenLoad()
+    {
+        ReloadSlots();
+
+        if (_inventoryHotbar != null)
+            RegisterInventoryBarContainer(_inventoryHotbar);
+    }
 
     public void OnStateEntered(GameplayState state)
     {
@@ -67,26 +86,6 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
         CommandBinds.Unregister<ClientInventorySystem>();
     }
 
-    public void UnloadButton()
-    {
-        if (InventoryButton == null)
-        {
-            return;
-        }
-
-        InventoryButton.OnPressed -= InventoryButtonPressed;
-    }
-
-    public void LoadButton()
-    {
-        if (InventoryButton == null)
-        {
-            return;
-        }
-
-        InventoryButton.OnPressed += InventoryButtonPressed;
-    }
-
     private SlotButton CreateSlotButton(SlotData data)
     {
         var button = new SlotButton(data);
@@ -97,13 +96,37 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
         return button;
     }
 
-    public void RegisterInventoryBarContainer(ItemSlotButtonContainer inventoryHotbar)
+    public bool TryGetPlayerSlotData(string slotName, [NotNullWhen(true)] out SlotData? slotData)
     {
-        _inventoryHotbar = inventoryHotbar;
+        slotData = null;
+        if (_playerInventory == null)
+            return false;
+
+        return _playerInventory.SlotData.TryGetValue(slotName, out slotData);
     }
 
-    private void InventoryButtonPressed(ButtonEventArgs args)
+    public void RegisterInventoryBarContainer(ItemSlotClothingContainer inventoryHotbar)
     {
+        _inventoryHotbar = inventoryHotbar;
+        ReloadSlots();
+    }
+
+    public void RegisterInventoryButton(SlotButton button)
+    {
+        if (_inventoryButton != null)
+        {
+            _inventoryButton.Pressed -= InventoryButtonPressed;
+        }
+
+        _inventoryButton = button;
+        button.Pressed += InventoryButtonPressed;
+    }
+
+    private void InventoryButtonPressed(GUIBoundKeyEventArgs arg1, SlotControl arg2)
+    {
+        if (arg1.Function != EngineKeyFunctions.UIClick)
+            return;
+
         ToggleInventoryBar();
     }
 
@@ -113,6 +136,14 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
         {
             _inventoryHotbar?.ClearButtons();
             return;
+        }
+
+        if (_inventoryHotbar != null)
+        {
+            var clothingSlots = clientInv.SlotData.Values.Where(d => !d.HasSlotGroup).ToList();
+            var maxWidth = clothingSlots.Max(d => d.ButtonOffset.X);
+            _inventoryHotbar.MaxColumns = maxWidth + 1;
+            _inventoryHotbar.Columns = maxWidth + 1;
         }
 
         foreach (var (_, data) in clientInv.SlotData)
@@ -181,14 +212,10 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
         if (_inventoryHotbar.Visible)
         {
             _inventoryHotbar.Visible = false;
-            if (InventoryButton != null)
-                InventoryButton.Pressed = false;
         }
         else
         {
             _inventoryHotbar.Visible = true;
-            if (InventoryButton != null)
-                InventoryButton.Pressed = true;
         }
     }
 
@@ -317,6 +344,7 @@ public sealed class InventoryUIController : UIController, IOnStateEntered<Gamepl
         UnloadSlots();
         _playerUid = clientUid;
         _playerInventory = clientInv;
+
         foreach (var slotData in clientInv.SlotData.Values)
         {
             AddSlot(slotData);
