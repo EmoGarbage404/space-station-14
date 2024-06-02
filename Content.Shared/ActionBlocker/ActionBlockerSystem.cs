@@ -100,8 +100,10 @@ namespace Content.Shared.ActionBlocker
         {
             var ev = new UseAttemptEvent(user, used);
             RaiseLocalEvent(user, ev);
+            var usedEv = new CanBeUsedAttemptEvent(user, used);
+            RaiseLocalEvent(used, ev);
 
-            return !ev.Cancelled;
+            return !ev.Cancelled && !usedEv.Cancelled;
         }
 
 

@@ -8,6 +8,10 @@
   - type: Item
     sprite: Objects/Specific/Mech/mecha_equipment.rsi
     size: Ginormous
+  - type: WhitelistUseable
+    whitelist:
+      components:
+      - Mech
   - type: MechEquipment
   - type: GuideHelp
     guides:

@@ -40,7 +40,7 @@ public sealed class MechGrabberSystem : EntitySystem
         SubscribeLocalEvent<MechGrabberComponent, MechEquipmentRemovedEvent>(OnEquipmentRemoved);
         SubscribeLocalEvent<MechGrabberComponent, AttemptRemoveMechEquipmentEvent>(OnAttemptRemove);
 
-        SubscribeLocalEvent<MechGrabberComponent, UserActivateInWorldEvent>(OnInteract);
+        SubscribeLocalEvent<MechGrabberComponent, AfterInteractEvent>(OnInteract);
         SubscribeLocalEvent<MechGrabberComponent, GrabberDoAfterEvent>(OnMechGrab);
     }
 
@@ -123,11 +123,10 @@ public sealed class MechGrabberSystem : EntitySystem
         args.States.Add(GetNetEntity(uid), state);
     }
 
-    private void OnInteract(EntityUid uid, MechGrabberComponent component, UserActivateInWorldEvent args)
+    private void OnInteract(EntityUid uid, MechGrabberComponent component, AfterInteractEvent args)
     {
-        if (args.Handled)
+        if (args.Handled || args.Target is not { } target)
             return;
-        var target = args.Target;
 
         if (args.Target == args.User || component.DoAfter != null)
             return;
