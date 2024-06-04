@@ -16,6 +16,7 @@ using Content.Shared.Movement.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Melee;
 using Robust.Shared.Containers;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Serialization;
 
@@ -51,6 +52,10 @@ public abstract class SharedMechSystem : EntitySystem
         SubscribeLocalEvent<MechPilotComponent, GetMeleeWeaponEvent>(OnGetMeleeWeapon);
         SubscribeLocalEvent<MechPilotComponent, CanAttackFromContainerEvent>(OnCanAttackFromContainer);
         SubscribeLocalEvent<MechPilotComponent, AttackAttemptEvent>(OnAttackAttempt);
+
+        SubscribeLocalEvent<MechPilotComponent, InteractHandEvent>(OnPilotInteractHand);
+        SubscribeLocalEvent<MechPilotComponent, UserActivateInWorldEvent>(OnPilotActivatedInWorld);
+        SubscribeLocalEvent<MechPilotComponent, InteractUsingEvent>(OnPilotInteractUsing);
     }
 
     private void OnToggleEquipmentAction(EntityUid uid, MechComponent component, MechToggleEquipmentEvent args)
@@ -98,11 +103,7 @@ public abstract class SharedMechSystem : EntitySystem
 
         var rider = EnsureComp<MechPilotComponent>(pilot);
 
-        // Warning: this bypasses most normal interaction blocking components on the user, like drone laws and the like.
-        var irelay = EnsureComp<InteractionRelayComponent>(pilot);
-
         _mover.SetRelay(pilot, mech);
-        _interaction.SetRelay(pilot, mech, irelay);
         rider.Mech = mech;
         Dirty(pilot, rider);
 
@@ -119,7 +120,6 @@ public abstract class SharedMechSystem : EntitySystem
         if (!RemComp<MechPilotComponent>(pilot))
             return;
         RemComp<RelayInputMoverComponent>(pilot);
-        RemComp<InteractionRelayComponent>(pilot);
 
         _actions.RemoveProvidedActions(pilot, mech);
     }
@@ -434,6 +434,35 @@ public abstract class SharedMechSystem : EntitySystem
         if (args.Handled)
             return;
         args.Used = component.CurrentSelectedEquipment;
+    }
+
+    private void OnPilotInteractHand(Entity<MechPilotComponent> ent, ref InteractHandEvent args)
+    {
+        if (args.Handled)
+            return;
+        args.Handled = true;
+        DoMechInteract(ent, Transform(args.Target).Coordinates, args.Target);
+    }
+
+    private void OnPilotActivatedInWorld(Entity<MechPilotComponent> ent, ref UserActivateInWorldEvent args)
+    {
+        if (args.Handled)
+            return;
+        args.Handled = true;
+        DoMechInteract(ent, Transform(args.Target).Coordinates, args.Target);
+    }
+
+    private void OnPilotInteractUsing(Entity<MechPilotComponent> ent, ref InteractUsingEvent args)
+    {
+        if (args.Handled)
+            return;
+        args.Handled = true;
+        DoMechInteract(ent, args.ClickLocation, args.Target);
+    }
+
+    protected void DoMechInteract(Entity<MechPilotComponent> ent, EntityCoordinates coords, EntityUid? target)
+    {
+        _interaction.UserInteraction(ent.Comp.Mech, coords, target);
     }
 }
 

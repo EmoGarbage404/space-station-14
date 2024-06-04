@@ -10,7 +10,6 @@ using Content.Shared.Mech.Equipment.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Wall;
 using Robust.Server.GameObjects;
-using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -85,7 +84,7 @@ public sealed class MechGrabberSystem : EntitySystem
         var (mechPos, mechRot) = _transform.GetWorldPositionRotation(mechxform);
 
         var offset = mechPos + mechRot.RotateVec(component.DepositOffset);
-        _transform.SetWorldPositionRotation(xform, offset, Angle.Zero);
+        _transform.SetWorldPositionRotation(toRemove, offset, Angle.Zero, xform);
         _mech.UpdateUserInterface(mech);
     }
 
@@ -148,9 +147,6 @@ public sealed class MechGrabberSystem : EntitySystem
             return;
 
         if (mech.Energy + component.GrabEnergyDelta < 0)
-            return;
-
-        if (!_interaction.InRangeUnobstructed(args.User, target))
             return;
 
         args.Handled = true;
