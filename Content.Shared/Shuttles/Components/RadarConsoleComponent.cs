@@ -23,6 +23,6 @@ public sealed partial class RadarConsoleComponent : Component
     /// <summary>
     /// If true, the radar will be centered on the entity. If not - on the grid on which it is located.
     /// </summary>
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool FollowEntity = false;
 }

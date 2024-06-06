@@ -14,6 +14,7 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Utility;
+using Serilog;
 
 namespace Content.Client.Shuttles.UI;
 
@@ -35,6 +36,8 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
 
     public bool ShowIFF { get; set; } = true;
     public bool ShowDocks { get; set; } = true;
+
+    public bool RotateWithEntity;
 
     /// <summary>
     /// Raised if the user left-clicks on the radar control with the relevant entitycoordinates.
@@ -138,7 +141,8 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         var mapPos = _transform.ToMapCoordinates(_coordinates.Value);
         var offset = _coordinates.Value.Position;
         var posMatrix = Matrix3Helpers.CreateTransform(offset, _rotation.Value);
-        var (_, ourEntRot, ourEntMatrix) = _transform.GetWorldPositionRotationMatrix(_coordinates.Value.EntityId);
+        var ourEntRot = RotateWithEntity ? _rotation.Value :_transform.GetWorldRotation(xform);
+        var ourEntMatrix = Matrix3Helpers.CreateTransform(_transform.GetWorldPosition(xform), ourEntRot);
         var ourWorldMatrix = Matrix3x2.Multiply(posMatrix, ourEntMatrix);
         Matrix3x2.Invert(ourWorldMatrix, out var ourWorldMatrixInvert);
 
@@ -173,7 +177,7 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
 
         handle.DrawPrimitives(DrawPrimitiveTopology.TriangleFan, radarPosVerts, Color.Lime);
 
-        var rot = ourEntRot + _rotation.Value;
+        var rot = _rotation.Value + ourEntRot;
         var viewBounds = new Box2Rotated(new Box2(-WorldRange, -WorldRange, WorldRange, WorldRange).Translated(mapPos.Position), rot, mapPos.Position);
         var viewAABB = viewBounds.CalcBoundingBox();
 
