@@ -1249,6 +1249,15 @@
   id: Taser
 
 - type: Tag
+  id: TileSubFloorBuildable
+
+- type: Tag
+  id: TileSubFloorTile
+
+- type: Tag
+  id: TileSpace
+
+- type: Tag
   id: TimerBrigElectronics
 
 - type: Tag

@@ -1,5 +1,18 @@
 - type: tile
+  id: BaseFloorTile
+  abstract: true
+  isSubfloor: false
+  baseTurf: Plating
+  placeOn:
+  - TileSubFloorTile
+  deconstructTools: [ Prying ]
+  footstepSounds:
+    collection: FootstepFloor
+  heatCapacity: 10000
+
+- type: tile
   id: FloorSteel
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor
   sprite: /Textures/Tiles/steel.png
   variants: 4
@@ -8,16 +21,11 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  footstepSounds:
-    collection: FootstepFloor
   itemDrop: FloorTileItemSteel
-  heatCapacity: 10000
 
 - type: tile
   id: FloorSteelCheckerLight
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-checker-light
   sprite: /Textures/Tiles/cafeteria.png
   variants: 4
@@ -26,16 +34,12 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  footstepSounds:
-    collection: FootstepFloor
   itemDrop: FloorTileItemSteelCheckerLight
   heatCapacity: 10000
 
 - type: tile
   id: FloorSteelCheckerDark
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-checker-dark
   sprite: /Textures/Tiles/checker_dark.png
   variants: 4
@@ -44,16 +48,12 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  footstepSounds:
-    collection: FootstepFloor
   itemDrop: FloorTileItemSteelCheckerDark
   heatCapacity: 10000
 
 - type: tile
   id: FloorSteelMini
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-mini
   sprite: /Textures/Tiles/steel_mini.png
   variants: 4
@@ -62,16 +62,12 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  footstepSounds:
-    collection: FootstepFloor
   itemDrop: FloorTileItemSteelMini
   heatCapacity: 10000
 
 - type: tile
   id: FloorSteelPavement
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-pavement
   sprite: /Textures/Tiles/steel_pavement.png
   variants: 4
@@ -80,16 +76,12 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  footstepSounds:
-    collection: FootstepFloor
   itemDrop: FloorTileItemSteelPavement
   heatCapacity: 10000
 
 - type: tile
   id: FloorSteelDiagonal
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-diagonal
   sprite: /Textures/Tiles/steel_diagonal.png
   variants: 4
@@ -98,28 +90,20 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  footstepSounds:
-    collection: FootstepFloor
   itemDrop: FloorTileItemSteelDiagonal
   heatCapacity: 10000
 
 - type: tile
   id: FloorSteelOffset
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-offset
   sprite: /Textures/Tiles/steel_offset.png
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  footstepSounds:
-    collection: FootstepFloor
   itemDrop: FloorTileItemSteelOffset
   heatCapacity: 10000
 
 - type: tile
   id: FloorSteelMono
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-mono
   sprite: /Textures/Tiles/steel_mono.png
   variants: 4
@@ -128,16 +112,13 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemSteelMono
-  heatCapacity: 10000
 
 - type: tile
   id: FloorSteelPavementVertical
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-pavement-vertical
   sprite: /Textures/Tiles/steel_pavement_vertical.png
   variants: 4
@@ -146,16 +127,13 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemSteelPavementVertical
-  heatCapacity: 10000
 
 - type: tile
   id: FloorSteelHerringbone
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-herringbone
   sprite: /Textures/Tiles/steel_herringbone.png
   variants: 4
@@ -164,16 +142,13 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemSteelHerringbone
-  heatCapacity: 10000
 
 - type: tile
   id: FloorSteelDiagonalMini
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor-diagonal-mini
   sprite: /Textures/Tiles/steel_diagonal_mini.png
   variants: 4
@@ -182,28 +157,23 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemSteelDiagonalMini
-  heatCapacity: 10000
 
 - type: tile
   id: FloorBrassFilled
+  parent: [ BaseFloorTile ]
   name: tiles-brass-floor-filled
   sprite: /Textures/Tiles/Misc/clockwork/clockwork_floor_filled.png
   baseTurf: PlatingBrass
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepHull
   itemDrop: FloorTileItemBrassFilled
-  heatCapacity: 10000
 
 - type: tile
   id: FloorBrassReebe
+  parent: [ BaseFloorTile ]
   name: tiles-brass-floor-reebe
   sprite: /Textures/Tiles/Misc/clockwork/reebe.png
   baseTurf: PlatingBrass
@@ -216,6 +186,7 @@
 
 - type: tile
   id: FloorPlastic
+  parent: [ BaseFloorTile ]
   name: tiles-plastic-floor
   sprite: /Textures/Tiles/plastic.png
   variants: 4
@@ -224,16 +195,12 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
-  footstepSounds:
-    collection: FootstepFloor
   itemDrop: FloorTileItemSteel
   heatCapacity: 10000
 
 - type: tile
   id: FloorWood
+  parent: [ BaseFloorTile ]
   name: tiles-wood
   sprite: /Textures/Tiles/wood.png
   variants: 4
@@ -242,18 +209,15 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepWood
   barestepSounds:
     collection: BarestepWood
   itemDrop: FloorTileItemWood
-  heatCapacity: 10000
 
 - type: tile
   id: FloorWhite
+  parent: [ BaseFloorTile ]
   name: tiles-white-floor
   sprite: /Textures/Tiles/white.png
   variants: 4
@@ -262,16 +226,13 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemWhite
-  heatCapacity: 10000
 
 - type: tile
   id: FloorWhiteMini
+  parent: [ BaseFloorTile ]
   name: tiles-white-floor-mini
   sprite: /Textures/Tiles/white_mini.png
   variants: 4
@@ -280,16 +241,13 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemWhiteMini
-  heatCapacity: 10000
 
 - type: tile
   id: FloorWhitePavement
+  parent: [ BaseFloorTile ]
   name: tiles-white-floor-pavement
   sprite: /Textures/Tiles/white_pavement.png
   variants: 4
@@ -298,16 +256,13 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemWhitePavement
-  heatCapacity: 10000
 
 - type: tile
   id: FloorWhiteDiagonal
+  parent: [ BaseFloorTile ]
   name: tiles-white-floor-diagonal
   sprite: /Textures/Tiles/white_diagonal.png
   variants: 4
@@ -316,28 +271,22 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemWhiteDiagonal
-  heatCapacity: 10000
 
 - type: tile
   id: FloorWhiteOffset
+  parent: [ BaseFloorTile ]
   name: tiles-white-floor-offset
   sprite: /Textures/Tiles/white_offset.png
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemWhiteOffset
-  heatCapacity: 10000
 
 - type: tile
   id: FloorWhiteMono
+  parent: [ BaseFloorTile ]
   name: tiles-white-floor-mono
   sprite: /Textures/Tiles/white_mono.png
   variants: 4
@@ -346,16 +295,13 @@
   - 1.0
   - 1.0
   - 1.0
-  baseTurf: Plating
-  isSubfloor: false
-  deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepTile
   itemDrop: FloorTileItemWhiteMono
-  heatCapacity: 10000
 
 - type: tile
   id: FloorWhitePavementVertical
+  parent: [ BaseFloorTile ]
   name: tiles-white-floor-pavement-vertical
   sprite: /Textures/Tiles/white_pavement_vertical.png
   variants: 4
@@ -374,6 +320,7 @@
 
 - type: tile
   id: FloorWhiteHerringbone
+  parent: [ BaseFloorTile ]
   name: tiles-white-floor-herringbone
   sprite: /Textures/Tiles/white_herringbone.png
   variants: 4
@@ -392,6 +339,7 @@
 
 - type: tile
   id: FloorWhiteDiagonalMini
+  parent: [ BaseFloorTile ]
   name: tiles-white-floor-diagonal-mini
   sprite: /Textures/Tiles/white_diagonal_mini.png
   variants: 4
@@ -410,6 +358,7 @@
 
 - type: tile
   id: FloorWhitePlastic
+  parent: [ BaseFloorTile ]
   name: tiles-plastic-white-floor
   sprite: /Textures/Tiles/white_plastic.png
   variants: 4
@@ -428,6 +377,7 @@
 
 - type: tile
   id: FloorDark
+  parent: [ BaseFloorTile ]
   name: tiles-dark-floor
   sprite: /Textures/Tiles/dark.png
   variants: 4
@@ -446,6 +396,7 @@
 
 - type: tile
   id: FloorDarkMini
+  parent: [ BaseFloorTile ]
   name: tiles-dark-floor-mini
   sprite: /Textures/Tiles/dark_mini.png
   variants: 4
@@ -464,6 +415,7 @@
 
 - type: tile
   id: FloorDarkPavement
+  parent: [ BaseFloorTile ]
   name: tiles-dark-floor-pavement
   sprite: /Textures/Tiles/dark_pavement.png
   variants: 4
@@ -482,6 +434,7 @@
 
 - type: tile
   id: FloorDarkDiagonal
+  parent: [ BaseFloorTile ]
   name: tiles-dark-floor-diagonal
   sprite: /Textures/Tiles/dark_diagonal.png
   variants: 4
@@ -500,6 +453,7 @@
 
 - type: tile
   id: FloorDarkOffset
+  parent: [ BaseFloorTile ]
   name: tiles-dark-floor-offset
   sprite: /Textures/Tiles/dark_offset.png
   baseTurf: Plating
@@ -512,6 +466,7 @@
 
 - type: tile
   id: FloorDarkMono
+  parent: [ BaseFloorTile ]
   name: tiles-dark-floor-mono
   sprite: /Textures/Tiles/dark_mono.png
   variants: 4
@@ -530,6 +485,7 @@
 
 - type: tile
   id: FloorDarkPavementVertical
+  parent: [ BaseFloorTile ]
   name: tiles-dark-floor-pavement-vertical
   sprite: /Textures/Tiles/dark_pavement_vertical.png
   variants: 4
@@ -548,6 +504,7 @@
 
 - type: tile
   id: FloorDarkHerringbone
+  parent: [ BaseFloorTile ]
   name: tiles-dark-floor-herringbone
   sprite: /Textures/Tiles/dark_herringbone.png
   variants: 4
@@ -566,6 +523,7 @@
 
 - type: tile
   id: FloorDarkDiagonalMini
+  parent: [ BaseFloorTile ]
   name: tiles-dark-floor-diagonal-mini
   sprite: /Textures/Tiles/dark_diagonal_mini.png
   variants: 4
@@ -584,6 +542,7 @@
 
 - type: tile
   id: FloorDarkPlastic
+  parent: [ BaseFloorTile ]
   name: tiles-plastic-dark-floor
   sprite: /Textures/Tiles/dark_plastic.png
   variants: 4
@@ -602,6 +561,7 @@
 
 - type: tile
   id: FloorTechMaint
+  parent: [ BaseFloorTile ]
   name: tiles-techmaint-floor
   sprite: /Textures/Tiles/tech_maint.png
   baseTurf: Plating
@@ -614,6 +574,7 @@
 
 - type: tile
   id: FloorReinforced
+  parent: [ BaseFloorTile ]
   name: tiles-reinforced-floor
   sprite: /Textures/Tiles/reinforced.png
   baseTurf: Plating
@@ -626,6 +587,7 @@
 
 - type: tile
   id: FloorMono
+  parent: [ BaseFloorTile ]
   name: tiles-mono-floor
   sprite: /Textures/Tiles/mono.png
   baseTurf: Plating
@@ -638,6 +600,7 @@
 
 - type: tile
   id: FloorLino
+  parent: [ BaseFloorTile ]
   name: tiles-linoleum-floor
   sprite: /Textures/Tiles/lino.png
   baseTurf: Plating
@@ -650,6 +613,7 @@
 
 - type: tile
   id: FloorSteelDirty
+  parent: [ BaseFloorTile ]
   name: tiles-dirty-steel-floor
   sprite: /Textures/Tiles/steel_dirty.png
   baseTurf: Plating
@@ -662,6 +626,7 @@
 
 - type: tile
   id: FloorElevatorShaft
+  parent: [ BaseFloorTile ]
   name: tiles-elevator-shaft
   sprite: /Textures/Tiles/elevator_shaft.png
   baseTurf: Plating
@@ -674,6 +639,7 @@
 
 - type: tile
   id: FloorMetalDiamond
+  parent: [ BaseFloorTile ]
   name: tiles-diamond-plate-floor
   sprite: /Textures/Tiles/metaldiamond.png
   baseTurf: Plating
@@ -686,6 +652,7 @@
 
 - type: tile
   id: FloorRockVault
+  parent: [ BaseFloorTile ]
   name: tiles-rock-floor
   sprite: /Textures/Tiles/rock_vault.png
   baseTurf: Plating
@@ -698,6 +665,7 @@
 
 - type: tile
   id: FloorBlue
+  parent: [ BaseFloorTile ]
   name: tiles-blue-tile
   sprite: /Textures/Tiles/blue.png
   baseTurf: Plating
@@ -710,6 +678,7 @@
 
 - type: tile
   id: FloorSteelLime
+  parent: [ BaseFloorTile ]
   name: tiles-lime-floor
   sprite: /Textures/Tiles/lime.png
   variants: 4
@@ -728,6 +697,7 @@
 
 - type: tile
   id: FloorMining
+  parent: [ BaseFloorTile ]
   name: tiles-mining-tile
   sprite: /Textures/Tiles/mining_floor.png
   baseTurf: Plating
@@ -740,6 +710,7 @@
 
 - type: tile
   id: FloorMiningDark
+  parent: [ BaseFloorTile ]
   name: tiles-mining-dark-tile
   sprite: /Textures/Tiles/mining_floor_dark.png
   baseTurf: Plating
@@ -752,6 +723,7 @@
 
 - type: tile
   id: FloorMiningLight
+  parent: [ BaseFloorTile ]
   name: tiles-mining-light-tile
   sprite: /Textures/Tiles/mining_floor_light.png
   baseTurf: Plating
@@ -765,6 +737,7 @@
 # Departamental
 - type: tile
   id: FloorFreezer
+  parent: [ BaseFloorTile ]
   name: tiles-freezer
   sprite: /Textures/Tiles/freezer.png
   baseTurf: Plating
@@ -777,6 +750,7 @@
 
 - type: tile
   id: FloorShowroom
+  parent: [ BaseFloorTile ]
   name: tiles-showroom-floor
   sprite: /Textures/Tiles/showroom.png
   baseTurf: Plating
@@ -789,6 +763,7 @@
 
 - type: tile
   id: FloorHydro
+  parent: [ BaseFloorTile ]
   name: tiles-hydro-floor
   sprite: /Textures/Tiles/hydro.png
   baseTurf: Plating
@@ -801,6 +776,7 @@
 
 - type: tile
   id: FloorBar
+  parent: [ BaseFloorTile ]
   name: tiles-bar-floor
   sprite: /Textures/Tiles/bar.png
   variants: 4
@@ -819,6 +795,7 @@
 
 - type: tile
   id: FloorClown
+  parent: [ BaseFloorTile ]
   name: tiles-clown-floor
   sprite: /Textures/Tiles/clown.png
   baseTurf: Plating
@@ -831,6 +808,7 @@
 
 - type: tile
   id: FloorMime
+  parent: [ BaseFloorTile ]
   name: tiles-mime-floor
   sprite: /Textures/Tiles/mime.png
   baseTurf: Plating
@@ -843,6 +821,7 @@
 
 - type: tile
   id: FloorKitchen
+  parent: [ BaseFloorTile ]
   name: tiles-kitchen-floor
   sprite: /Textures/Tiles/kitchen.png
   baseTurf: Plating
@@ -855,6 +834,7 @@
 
 - type: tile
   id: FloorLaundry
+  parent: [ BaseFloorTile ]
   name: tiles-laundry-floor
   sprite: /Textures/Tiles/laundry.png
   baseTurf: Plating
@@ -867,6 +847,7 @@
 
 - type: tile
   id: FloorSteelDamaged
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor
   sprite: /Textures/Tiles/steel_damaged.png
   variants: 5
@@ -881,11 +862,12 @@
   deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
-  itemDrop: FloorTileItemSteel #This should probably be made null when it becomes possible to make it such, in SS13 prying destroyed tiles wouldn't give you anything.
+  itemDrop: null
   heatCapacity: 10000
 
 - type: tile
   id: FloorSteelBurnt
+  parent: [ BaseFloorTile ]
   name: tiles-steel-floor
   sprite: /Textures/Tiles/steel_burnt.png
   variants: 2
@@ -897,7 +879,7 @@
   deconstructTools: [ Prying ]
   footstepSounds:
     collection: FootstepFloor
-  itemDrop: FloorTileItemSteel #Same case as FloorSteelDamaged, make it null when possible
+  itemDrop: null
   heatCapacity: 10000
 
 

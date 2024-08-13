@@ -1,6 +1,7 @@
 - type: tile
   id: Space
   name: tiles-space
+  tags: [ TileSpace ]
   friction: 0
   isSubfloor: true
   isSpace: true

@@ -17,6 +17,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -27,6 +28,7 @@ public sealed class FloorTileSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDefinitionManager = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
@@ -135,7 +137,7 @@ public sealed class FloorTileSystem : EntitySystem
                 var tile = mapGrid.GetTileRef(location);
                 var baseTurf = (ContentTileDefinition) _tileDefinitionManager[tile.Tile.TypeId];
 
-                if (HasBaseTurf(currentTileDefinition, baseTurf.ID))
+                if (HasBaseTurf(currentTileDefinition, baseTurf))
                 {
                     if (!_stackSystem.Use(uid, 1, stack))
                         continue;
@@ -145,7 +147,7 @@ public sealed class FloorTileSystem : EntitySystem
                     return;
                 }
             }
-            else if (HasBaseTurf(currentTileDefinition, ContentTileDefinition.SpaceID))
+            else if (HasBaseTurf(currentTileDefinition, _prototype.Index<ContentTileDefinition>(ContentTileDefinition.SpaceID)))
             {
                 if (!_stackSystem.Use(uid, 1, stack))
                     continue;
@@ -164,9 +166,9 @@ public sealed class FloorTileSystem : EntitySystem
         }
     }
 
-    public bool HasBaseTurf(ContentTileDefinition tileDef, string baseTurf)
+    public bool HasBaseTurf(ContentTileDefinition tileToPlace, ContentTileDefinition mapTile)
     {
-        return tileDef.BaseTurf == baseTurf;
+        return tileToPlace.PlaceOn.Any(mapTile.Tags.Contains);
     }
 
     private void PlaceAt(EntityUid user, EntityUid gridUid, MapGridComponent mapGrid, EntityCoordinates location,

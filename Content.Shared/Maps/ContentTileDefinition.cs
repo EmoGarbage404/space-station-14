@@ -1,5 +1,6 @@
 using Content.Shared.Atmos;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Tag;
 using Content.Shared.Tools;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
@@ -16,13 +17,14 @@ namespace Content.Shared.Maps
         [ValidatePrototypeId<ToolQualityPrototype>]
         public const string PryingToolQuality = "Prying";
 
+        [ValidatePrototypeId<ContentTileDefinition>]
         public const string SpaceID = "Space";
 
-        [ParentDataFieldAttribute(typeof(AbstractPrototypeIdArraySerializer<ContentTileDefinition>))]
+        [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<ContentTileDefinition>))]
         public string[]? Parents { get; private set; }
 
         [NeverPushInheritance]
-        [AbstractDataFieldAttribute]
+        [AbstractDataField]
         public bool Abstract { get; private set; }
 
         [IdDataField] public string ID { get; } = string.Empty;
@@ -40,7 +42,16 @@ namespace Content.Shared.Maps
         [DataField("isSubfloor")] public bool IsSubFloor { get; private set; }
 
         [DataField("baseTurf")]
-        public string BaseTurf { get; private set; } = string.Empty;
+        public string? BaseTurf { get; private set; }
+
+        [DataField]
+        public List<ProtoId<TagPrototype>> PlaceOn = new();
+
+        [DataField]
+        public List<ProtoId<TagPrototype>> RequiredSubfloor = new();
+
+        [DataField]
+        public List<ProtoId<TagPrototype>> Tags = new();
 
         [DataField]
         public PrototypeFlags<ToolQualityPrototype> DeconstructTools { get; set; } = new();
@@ -75,7 +86,7 @@ namespace Content.Shared.Maps
         [DataField("heatCapacity")] public float HeatCapacity = Atmospherics.MinimumHeatCapacity;
 
         [DataField("itemDrop", customTypeSerializer:typeof(PrototypeIdSerializer<EntityPrototype>))]
-        public string ItemDropPrototypeName { get; private set; } = "FloorTileItemSteel";
+        public string? ItemDropPrototypeName { get; private set; } = "FloorTileItemSteel";
 
         // TODO rename data-field in yaml
         /// <summary>
