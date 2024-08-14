@@ -37,7 +37,9 @@ public sealed class FloorTileSystem : EntitySystem
     [Dependency] private readonly SharedStackSystem _stackSystem = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly TileSystem _tile = default!;
+    [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
+    [Dependency] private readonly TileLayerGridDataSystem _tileLayerGridData = default!;
 
     private static readonly Vector2 CheckRange = new(1f, 1f);
 
@@ -177,8 +179,11 @@ public sealed class FloorTileSystem : EntitySystem
         _adminLogger.Add(LogType.Tile, LogImpact.Low, $"{ToPrettyString(user):actor} placed tile {_tileDefinitionManager[tileId].Name} at {ToPrettyString(gridUid)} {location}");
 
         var random = new System.Random((int) _timing.CurTick.Value);
-        var variant = _tile.PickVariant((ContentTileDefinition) _tileDefinitionManager[tileId], random);
-        mapGrid.SetTile(location.Offset(new Vector2(offset, offset)), new Tile(tileId, 0, variant));
+        var tile = (ContentTileDefinition)_tileDefinitionManager[tileId];
+        var variant = _tile.PickVariant(tile, random);
+        var trueLocation = location.Offset(new Vector2(offset, offset));
+        _map.SetTile((gridUid, mapGrid), trueLocation, new Tile(tileId, 0, variant));
+        _tileLayerGridData.AddTileToTop(_map.GetTileRef(gridUid, mapGrid, trueLocation), tile);
 
         _audio.PlayPredicted(placeSound, location, user);
     }

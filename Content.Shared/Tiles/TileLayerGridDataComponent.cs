@@ -4,9 +4,9 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Tiles;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class TileLayerGridDataComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public Dictionary<Vector2i, List<ProtoId<ContentTileDefinition>>> TileStacks = new();
 }

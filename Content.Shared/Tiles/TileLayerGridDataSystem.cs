@@ -9,9 +9,7 @@ namespace Content.Shared.Tiles;
 
 public sealed class TileLayerGridDataSystem : EntitySystem
 {
-    // TODO: perf-wise. it's probably worth a reverse look dict for this just cause of the amount of times this gets modified.
     [Dependency] private readonly ITileDefinitionManager _tileDefMan = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
 
     /// <inheritdoc/>
@@ -33,6 +31,23 @@ public sealed class TileLayerGridDataSystem : EntitySystem
             BuildInitialGridData((ent, ent, mapGrid));
     }
 
+    public ProtoId<ContentTileDefinition>? RemoveTopMostTile(TileRef tileRef)
+    {
+        if (!TryComp<TileLayerGridDataComponent>(tileRef.GridUid, out var layerComp))
+            return null;
+
+        layerComp.TileStacks[tileRef.GridIndices].RemoveAt(0);
+        return layerComp.TileStacks[tileRef.GridIndices].FirstOrNull();
+    }
+
+    public void AddTileToTop(TileRef tileRef, ContentTileDefinition toAdd)
+    {
+        if (!TryComp<TileLayerGridDataComponent>(tileRef.GridUid, out var layerComp))
+            return;
+
+        layerComp.TileStacks.GetOrNew(tileRef.GridIndices).Insert(0, toAdd.ID);
+    }
+
     public List<ProtoId<ContentTileDefinition>> GetTileData(TileRef tileRef)
     {
         if (!TryComp<TileLayerGridDataComponent>(tileRef.GridUid, out var layerComp))
@@ -44,10 +59,6 @@ public sealed class TileLayerGridDataSystem : EntitySystem
     public void BuildInitialGridData(Entity<TileLayerGridDataComponent, MapGridComponent> ent)
     {
         var xform = Transform(ent);
-
-        var mapBaseTurf = 1 == 0
-            ? string.Empty
-            : ContentTileDefinition.SpaceID ;
 
         var tileEnumerator = _map.GetAllTilesEnumerator(ent, ent);
         while (tileEnumerator.MoveNext(out var nullableTileRef))
@@ -64,7 +75,7 @@ public sealed class TileLayerGridDataSystem : EntitySystem
                 string? curTile = _tileDefMan[tileRef.Tile.TypeId].ID;
                 while (curTile != null)
                 {
-                    var tilePrototype = _prototype.Index<ContentTileDefinition>(curTile);
+                    var tilePrototype = (ContentTileDefinition) _tileDefMan[curTile];
 
                     ent.Comp1.TileStacks[indices].Add(tilePrototype.ID);
 
@@ -72,15 +83,21 @@ public sealed class TileLayerGridDataSystem : EntitySystem
                     {
                         curTile = baseTurf;
                     }
-                    else if (curTile != mapBaseTurf)
-                    {
-                        curTile = mapBaseTurf;
-                    }
                     else
                     {
                         curTile = null;
                     }
                 }
+            }
+
+            // Add our map-specific tiles in
+            if (false)
+            {
+
+            }
+            else // Well it is a space game, i guess.
+            {
+                ent.Comp1.TileStacks[indices].Add(ContentTileDefinition.SpaceID);
             }
 
             // Validate the stack.
@@ -92,8 +109,8 @@ public sealed class TileLayerGridDataSystem : EntitySystem
 
                 if (ent.Comp1.TileStacks[indices].TryGetValue(curIndex + 1, out var nextTile))
                 {
-                    var curTilePrototype = _prototype.Index(curTile);
-                    var nextTilePrototype = _prototype.Index(nextTile);
+                    var curTilePrototype = (ContentTileDefinition) _tileDefMan[curTile];
+                    var nextTilePrototype = (ContentTileDefinition) _tileDefMan[nextTile];
 
                     if (curTilePrototype.RequiredSubfloor.Count == 0)
                         continue;
@@ -105,5 +122,7 @@ public sealed class TileLayerGridDataSystem : EntitySystem
                 }
             }
         }
+
+        Dirty(ent);
     }
 }
