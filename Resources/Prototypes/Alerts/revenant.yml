@@ -16,7 +16,7 @@
 
 - type: entity
   id: AlertEssenceSpriteView
-  categories: [ hideSpawnMenu ]
+  categories: [ HideSpawnMenu ]
   components:
   - type: GenericCounterAlert
   - type: Sprite

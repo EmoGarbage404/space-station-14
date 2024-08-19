@@ -230,13 +230,19 @@ public class RCDSystem : EntitySystem
 
         // Exit if the RCD prototype has changed
         if (component.ProtoId != args.Event.StartingProtoId)
+        {
+            args.Cancel();
             return;
+        }
 
         // Ensure the RCD operation is still valid
         var location = GetCoordinates(args.Event.Location);
 
         if (!TryGetMapGridData(location, out var mapGridData))
+        {
+            args.Cancel();
             return;
+        }
 
         if (!IsRCDOperationStillValid(uid, component, mapGridData.Value, args.Event.Target, args.Event.User))
             args.Cancel();
@@ -565,8 +571,6 @@ public class RCDSystem : EntitySystem
             if (!TryComp(gridUid, out mapGrid))
                 return false;
         }
-
-        gridUid = mapGrid.Owner;
 
         var tile = _mapSystem.GetTileRef(gridUid.Value, mapGrid, location);
         var position = _mapSystem.TileIndicesFor(gridUid.Value, mapGrid, location);
