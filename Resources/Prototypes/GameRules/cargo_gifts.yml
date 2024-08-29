@@ -1,3 +1,22 @@
+# Tables --  Add your new event to this Table if you want it to happen via the basic/ramping schedulers.
+
+- type: entityTable
+  id: CargoGiftsTable
+  table: !type:GroupSelector # ~~we need to pass a list of rules, since rules have further restrictions to consider via StationEventComp~~ But we arent doing that shit yet, it picks a random one StationEventComp be damned.
+    children:
+    - id: GiftsEngineering
+    - id: GiftsFireProtection
+    - id: GiftsJanitor
+    - id: GiftsMedical
+    - id: GiftsPizzaPartyLarge
+    - id: GiftsPizzaPartySmall
+    - id: GiftsSecurityGuns
+    - id: GiftsSecurityRiot
+    - id: GiftsSpacingSupplies
+    - id: GiftsVendingRestock
+
+# Game Rules
+    
 - type: entity
   id: CargoGiftsBase
   parent: BaseGameRule
@@ -17,7 +36,6 @@
 - type: entity
   id: GiftsPizzaPartySmall
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 5
@@ -35,7 +53,6 @@
 - type: entity
   id: GiftsPizzaPartyLarge
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 2
@@ -53,7 +70,6 @@
 - type: entity
   id: GiftsEngineering
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 5
@@ -74,7 +90,6 @@
 - type: entity
   id: GiftsVendingRestock
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 4
@@ -95,7 +110,6 @@
 - type: entity
   id: GiftsJanitor
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 6
@@ -113,7 +127,6 @@
 - type: entity
   id: GiftsMedical
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 8
@@ -133,7 +146,6 @@
 - type: entity
   id: GiftsSpacingSupplies
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 4
@@ -153,7 +165,6 @@
 - type: entity
   id: GiftsFireProtection
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 4
@@ -171,7 +182,6 @@
 - type: entity
   id: GiftsSecurityGuns
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 3
@@ -190,7 +200,6 @@
 - type: entity
   id: GiftsSecurityRiot
   parent: CargoGiftsBase
-  noSpawn: true
   components:
   - type: StationEvent
     weight: 4
